@@ -131,7 +131,7 @@ predictions = model.predict(new_data)
 | Random Forest | 0.89 | 0.85 | 0.87 |
 | LightGBM | 0.67 | 0.82 | 0.74 |
 | XGBoost | 0.97 | 0.85 | 0.90 |
-| XGBoost (GridSearch) | 0.97 | 0.85 | 0.90 |
+| XGBoost (GridSearchCV) | 0.97 | 0.85 | 0.90 |
 | **CatBoost (Final)** | **0.92** | **0.87** | **0.89** |
 | Neural Network | 0.70 | 0.54 | 0.61 |
 | Voting Ensemble | 0.97 | 0.85 | 0.90 |
