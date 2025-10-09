@@ -1,123 +1,100 @@
-# Fraud Detection using Machine Learning
+# Credit Card Fraud Detection with CatBoost and SHAP
 
-### A data-driven approach to identifying fraudulent transactions with CatBoost and Explainable AI (SHAP)
+### Advanced Machine Learning and Explainability for Financial Transaction Fraud Detection
 
 ---
 
 ## Project Overview
 
-This project focuses on **credit card fraud detection** using advanced machine learning and interpretability techniques.  
-The dataset used is the **Kaggle Credit Card Fraud Detection Dataset**, containing anonymised transaction features for over **284,000 transactions**, of which only **492 are fraudulent** (~0.172% of the total).
+Comprehensive credit card fraud detection project leveraging state-of-the-art machine learning and explainability techniques.
 
-The objective is to **detect fraudulent activity** in highly imbalanced financial datasets while ensuring **model robustness**, **scalability**, and **interpretability**.  
-Instead of relying on oversampling methods like SMOTE, this project optimises model performance through **class weighting**, **shuffling**, and **careful feature analysis**.
+Using the Kaggle Credit Card Fraud Detection dataset - a highly imbalanced dataset with 284,807 anonymised transactions and only 492 fraudulent cases (~0.172%) - this project builds robust classification models that maximise detection while minimising false positives.
 
----
+Key strengths include:
 
-## Key Features
-
-- Handles **class imbalance** using **computed class weights** (`scale_pos_weight`) instead of oversampling.
-- Builds multiple models (baseline to advanced) and identifies the **CatBoost Classifier** as the most effective.
-- Implements **shuffling** before model training to ensure unbiased representation.
-- Provides detailed **SHAP-based feature interpretation** for transparency and explainability.
-- Evaluates models on metrics beyond accuracy, focusing on **Recall**, **Precision**, **F1-score**, and **AUPRC**.
+- Handling class imbalance with class weighting instead of oversampling
+- Employing CatBoost as the primary classifier for superior performance
+- Full model interpretability using SHAP (SHapley Additive exPlanations)
+- A reusable pipeline combining preprocessing and modeling for deployment
 
 ---
 
-## Dataset
+## Dataset Description
 
-**Source:** [Credit Card Fraud Detection Dataset (Kaggle)](https://www.kaggle.com/mlg-ulb/creditcardfraud)
-
-- **Transactions:** 284,807  
-- **Fraud cases:** 492 (0.172%)  
-- **Features:** 30 (V1–V28 anonymised PCA components, plus `Time` and `Amount`)  
-- **Target:** `Class` → 1 = Fraud, 0 = Legitimate  
-
-> Dataset is heavily imbalanced, making this a challenging binary classification problem.
+- **Transactions:** 284,807
+- **Fraudulent cases:** 492 (~0.172%)
+- **Features:** 30 (including PCA components V1–V28, plus `Time` and `Amount`)
+- **Label:** `Class` - 1 indicates fraud, 0 indicates non-fraud
 
 ---
 
-## Workflow
+## Project Workflow
 
 ### 1. Data Preprocessing
-- Loaded the dataset using `pandas` and performed integrity checks.
-- Normalised features where appropriate using StandardScaler, RobustScaler and Log Transform.
-- **Shuffled** the dataset to remove any temporal bias.
-- Split into training, validation, and test sets (stratified on target class).
-- Calculated **`scale_pos_weight`** to handle imbalance dynamically.
-  
+
+- Load dataset and perform data integrity checks.
+- Shuffle data to ensure unbiased representation.
+- Log-transform and robust scale the `Amount` feature.
+- Standard scale the `Time` feature.
+- Split into **training**, **validation**, and **test** sets.
+- Calculate class weights for imbalance handling.
+
 ### 2. Exploratory Data Analysis (EDA)
-- Explored data distribution for both classes using histograms and boxplots.
-- Analysed feature correlation and significance to identify informative components.
-- Visualised **class imbalance ratio** and **amount distribution** across transactions.
 
-### 3. Model Building
-Several models were trained and evaluated:
-- Logistic Regression (Baseline)
-- Random Forest Classifier
-- XGBoost Classifier
-- Gradient Boosting Classifier
-- Multi-Layer Perceptron Neural Network
-- Ensemble Model
-- **CatBoost Classifier (Final Model)**
+- Visualise feature distributions and correlations.
+- Examine the severe class imbalance.
+- Study transaction amount behavior across classes.
 
-**Why CatBoost?**  
-CatBoost demonstrated superior performance on precision-recall trade-off, handled imbalance effectively with `scale_pos_weight`, and required minimal manual feature encoding.
+### 3. Model Development
+
+- Train baseline classifiers: Logistic Regression, Random Forest.
+- Train advanced gradient boosting models: XGBoost, LightGBM.
+- Develop a Multi-Layer Perceptron (Neural Network).
+- Build Voting Ensemble combining multiple classifiers.
+- Select **CatBoost** as the final model due to superior fraud class recall and balanced precision.
 
 ### 4. Model Evaluation
-Metrics used:
-- **Accuracy**
-- **Precision**
-- **Recall**
-- **F1-score**
-- **AUPRC**
 
-Performance summary (CatBoost final model):
-| Metric | Score |
-|:--|--:|
-| Accuracy | ~99.9% |
-| Precision | High (low false positives) |
-| Recall | Strong recall on minority class |
-| AUPRC | ~0.99 |
-
-The CatBoost model achieved a **balanced performance** across metrics while maintaining interpretability and stability.
+- Evaluate models on multiple metrics suited for imbalanced data:
+  - Recall, Precision, F1-score for fraud class
+  - Accuracy and Weighted metrics
+  - Average Precision (AUPRC)
+- CatBoost achieves a strong balance of high recall (detection rate), precision, and PR-AUC (~0.87).
 
 ### 5. Explainability with SHAP
-Explainability was a key part of this project:
-- Used **SHAP (SHapley Additive exPlanations)** to visualise and interpret feature contributions.
-- Generated **feature importance plots** and **SHAP summary plots**.
-- Identified key features influencing fraud prediction decisions, aiding trust in model deployment.
+
+- Generate SHAP global feature importance and local explanations.
+- Interpret key features driving fraud detection decisions.
+- Demonstrate model transparency and build trust for downstream use.
 
 ---
 
-## Saved Artifacts
+## Saved Artifacts and Reproducibility
 
-- Trained and tuned **CatBoost pipeline** saved as a serialised model (`.pkl` or `.joblib`).
-- Notebook includes cell outputs to reproduce pipeline training and evaluation.
+- Pipeline comprising all preprocessing steps and trained CatBoost classifier saved as `fraud_detection_pipeline.joblib`.
+- Jupyter Notebook (`Fraud_Detection.ipynb`) contains all code, EDA, modeling, and explanation steps.
 
-> You can load the pipeline directly for inference or further fine-tuning.
-
----
-
-## Tech Stack
-
-| Category | Tools / Libraries |
-|-----------|------------------|
-| Programming | Python (Jupyter Notebook) |
-| Data Handling | Pandas, NumPy |
-| Visualisation | Matplotlib, Seaborn, SHAP |
-| Machine Learning | Scikit-learn, XGBoost, CatBoost |
-| Environment | Jupyter, Anaconda, VS Code |
-| Version Control | Git, GitHub |
+Users can easily reuse the pipeline for inference or fine-tuning with minimal setup.
 
 ---
 
-## How to Run This Project
+## Technologies Used
+
+- **Programming Language:** Python
+- **Data Handling:** Pandas, NumPy
+- **Visualization:** Matplotlib, Seaborn, SHAP
+- **Modeling:** CatBoost, XGBoost, LightGBM, Random Forest, Logistic Regression, Neural Network  
+- **Environment:** Jupyter, VSCode  
+- **Version Control:** GitHub
+
+---
+
+## Getting Started
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/<your-username>/Fraud-Detection.git
-cd Fraud-Detection
+git clone https://github.com/<your-username>/Credit-Card-Fraud-Detection.git
+cd Credit-Card-Fraud-Detection
 ```
 
 ### 2. Create a virtual environment
@@ -146,18 +123,26 @@ predictions = model.predict(new_data)
 
 ---
 
-## Results & Visuals
+## Results
 
-| Model | ROC-AUC | Recall | F1-score |
-|:------|:--------:|:-------:|:---------:|
-| Logistic Regression | 0.95 | Moderate | Good |
-| Random Forest | 0.97 | High | High |
-| XGBoost | 0.98 | High | High |
-| **CatBoost (Final)** | **0.99** | **Excellent** | **Excellent** |
+| Model | Precision (Fraud) | Recall (Fraud) | F1-score (Fraud) |
+|--------|-------------------|----------------|------------------|
+| Logistic Regression | 0.69 | 0.85 | 0.76 |
+| Random Forest | 0.89 | 0.85 | 0.87 |
+| LightGBM | 0.67 | 0.82 | 0.74 |
+| XGBoost | 0.97 | 0.85 | 0.90 |
+| XGBoost (GridSearch) | 0.97 | 0.85 | 0.90 |
+| **CatBoost (Final)** | **0.92** | **0.87** | **0.89** |
+| Neural Network | 0.70 | 0.54 | 0.61 |
+| Voting Ensemble | 0.97 | 0.85 | 0.90 |
 
-### Example SHAP Plot:
-*(Generated in notebook)*  
-Feature importance visualisation showing the top drivers influencing fraud prediction.
+Average Precision (AUPRC) for the top performing Models
+- XGBoost: 0.9129
+- LightGBM: 0.6091
+- CatBoost: 0.9081
+- Voting Ensemble: 0.9141
+
+AUPRC (Area Under Precision-Recall Curve) measures model ability to balance recall (detecting fraud) and precision (avoiding false alarms) across thresholds, making it the preferred metric for highly imbalanced fraud detection. It was calculated on predicted probabilities using scikit-learn’s average_precision_score on the test set.
 
 ---
 
